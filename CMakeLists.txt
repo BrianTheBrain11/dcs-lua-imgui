@@ -96,14 +96,16 @@ target_include_directories( LuaImGui
     "${CMAKE_CURRENT_SOURCE_DIR}/src/include"
 )
 
-if(CMAKE_PRESET_NAME STREQUAL "x64-release")
+if (NOT LUA_IMGUI_BIN_PATH)
+    set(LUA_IMGUI_BIN_PATH "${CMAKE_SOURCE_DIR}/bin")
+endif()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
     #MESSAGE(INFO " LUA BIN PATH: ${LUA_IMGUI_BIN_PATH}")
-    if ( LUA_IMGUI_BIN_PATH )
-        MESSAGE(INFO " WILL COPY LuaImGui.dll TO ${LUA_IMGUI_BIN_PATH}")
-        add_custom_command(TARGET LuaImGui POST_BUILD
-            COMMAND "${CMAKE_COMMAND}"
-            -E copy "$<TARGET_FILE:LuaImGui>" "${LUA_IMGUI_BIN_PATH}/$<TARGET_FILE_NAME:LuaImGui>"
-            COMMENT "Copying LuaImGui to bin"
-        )
-    endif()
+    MESSAGE(INFO " WILL COPY LuaImGui.dll TO ${LUA_IMGUI_BIN_PATH}")
+    add_custom_command(TARGET LuaImGui POST_BUILD
+        COMMAND "${CMAKE_COMMAND}"
+        -E copy "$<TARGET_FILE:LuaImGui>" "${LUA_IMGUI_BIN_PATH}/$<TARGET_FILE_NAME:LuaImGui>"
+        COMMENT "Copying LuaImGui to bin"
+    )
 endif()
